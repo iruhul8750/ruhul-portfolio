@@ -1,0 +1,8 @@
+ruhul-portfolio/
+│
+├── index.html          # Main HTML file
+├── style.css           # All styling & responsive design
+├── script.js           # Interactive functionality (navbar, animations, etc.)
+├── file-structure.txt  # Project structure documentation
+└── assets/             (optional - for images if needed)
+    └── (empty for now)
