@@ -70,15 +70,302 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// Contact form
-const contactForm = document.querySelector('.contact-form-3d');
+// Contact Form with FormSubmit and Modal
+const contactForm = document.getElementById('contactForm');
+const modal = document.getElementById('thankYouModal');
+const modalCloseBtn = document.querySelector('.modal-close-btn');
+let sparkleAnimation = null;
+let sparkleCanvas = null;
+let sparkleCtx = null;
+let sparkles = [];
+
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    alert('📬 Thank you for reaching out! Ruhul will respond within 24 hours.');
-    contactForm.reset();
+    
+    // Get form values
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+    
+    // Validate
+    if (!name || !email || !message) {
+      alert('Please fill in all fields');
+      return;
+    }
+    
+    // Show loading state
+    const submitBtn = document.getElementById('submitBtn');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    submitBtn.disabled = true;
+    
+    // Create a temporary iframe to handle form submission without page reload
+    const iframe = document.createElement('iframe');
+    iframe.name = 'hidden_iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    
+    // Set form target to iframe
+    contactForm.target = 'hidden_iframe';
+    
+    // Submit the form
+    contactForm.submit();
+    
+    // Show modal and reset form after submission
+    setTimeout(() => {
+      showModal();
+      startFullPageSparkles(); // Start sparkle animation from modal
+      contactForm.reset();
+      
+      // Clean up iframe
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+      }, 1000);
+      
+      // Reset button
+      submitBtn.innerHTML = originalBtnText;
+      submitBtn.disabled = false;
+      
+      // Reset form target
+      contactForm.target = '';
+    }, 500);
   });
 }
+
+// Full Page Sparkle Animation - Particles burst from modal
+function startFullPageSparkles() {
+  // Get or create canvas
+  sparkleCanvas = document.getElementById('fullPageSparkleCanvas');
+  if (!sparkleCanvas) {
+    sparkleCanvas = document.createElement('canvas');
+    sparkleCanvas.id = 'fullPageSparkleCanvas';
+    sparkleCanvas.className = 'full-page-sparkle-canvas';
+    document.body.appendChild(sparkleCanvas);
+  }
+  
+  // Set canvas size to full window
+  sparkleCanvas.width = window.innerWidth;
+  sparkleCanvas.height = window.innerHeight;
+  sparkleCtx = sparkleCanvas.getContext('2d');
+  sparkleCanvas.classList.add('active');
+  
+  // Get modal position to burst sparkles from center
+  const modalElement = document.querySelector('.modal-content');
+  const modalRect = modalElement.getBoundingClientRect();
+  const burstX = modalRect.left + modalRect.width / 2;
+  const burstY = modalRect.top + modalRect.height / 2;
+  
+  // Create sparkles with modal colors
+  const sparkleColors = [
+    '#10b981', // green (modal accent)
+    '#06b6d4', // cyan (modal accent)
+    '#6366f1', // primary purple
+    '#8b5cf6', // lighter purple
+    '#34d399', // light green
+    '#22d3ee', // light cyan
+    '#a78bfa', // soft purple
+    '#fbbf24'  // gold accent
+  ];
+  
+  sparkles = [];
+  const sparkleCount = 120;
+  
+  class SparkleParticle {
+    constructor(x, y, color) {
+      this.x = x;
+      this.y = y;
+      this.originalX = x;
+      this.originalY = y;
+      this.size = Math.random() * 6 + 2;
+      this.speedX = (Math.random() - 0.5) * 8;
+      this.speedY = (Math.random() - 0.5) * 8 - 2;
+      this.gravity = 0.15;
+      this.opacity = 1;
+      this.color = color || sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+      this.rotation = Math.random() * 360;
+      this.rotationSpeed = (Math.random() - 0.5) * 10;
+      this.type = Math.random() > 0.7 ? 'star' : 'circle';
+    }
+    
+    update() {
+      this.speedY += this.gravity;
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.opacity -= 0.008;
+      this.rotation += this.rotationSpeed;
+      this.size *= 0.99;
+      return this.opacity > 0 && this.size > 0.2 && this.y < window.innerHeight + 100;
+    }
+    
+    draw(ctx) {
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = this.color;
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation * Math.PI / 180);
+      
+      if (this.type === 'star') {
+        // Draw star shape
+        ctx.beginPath();
+        const spikes = 5;
+        const outerRadius = this.size;
+        const innerRadius = this.size / 2;
+        for (let i = 0; i < spikes * 2; i++) {
+          const radius = i % 2 === 0 ? outerRadius : innerRadius;
+          const angle = (i * Math.PI * 2) / (spikes * 2);
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      } else {
+        // Draw circle/diamond
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        
+        // Add inner glow
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size * 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+      }
+      
+      ctx.restore();
+    }
+  }
+  
+  // Create burst of sparkles from modal center
+  for (let i = 0; i < sparkleCount; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const radius = Math.random() * 30;
+    const x = burstX + Math.cos(angle) * radius;
+    const y = burstY + Math.sin(angle) * radius;
+    const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+    sparkles.push(new SparkleParticle(x, y, color));
+  }
+  
+  // Also create some from modal edges
+  for (let i = 0; i < 60; i++) {
+    const edge = Math.floor(Math.random() * 4);
+    let x, y;
+    switch(edge) {
+      case 0: // top
+        x = burstX + (Math.random() - 0.5) * modalRect.width;
+        y = modalRect.top;
+        break;
+      case 1: // right
+        x = modalRect.right;
+        y = burstY + (Math.random() - 0.5) * modalRect.height;
+        break;
+      case 2: // bottom
+        x = burstX + (Math.random() - 0.5) * modalRect.width;
+        y = modalRect.bottom;
+        break;
+      default: // left
+        x = modalRect.left;
+        y = burstY + (Math.random() - 0.5) * modalRect.height;
+    }
+    const color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+    sparkles.push(new SparkleParticle(x, y, color));
+  }
+  
+  // Animate sparkles
+  function animateSparkles() {
+    if (!sparkleCanvas || !modal.classList.contains('show')) {
+      if (sparkleAnimation) cancelAnimationFrame(sparkleAnimation);
+      sparkleCanvas?.classList.remove('active');
+      return;
+    }
+    
+    sparkleCtx.clearRect(0, 0, sparkleCanvas.width, sparkleCanvas.height);
+    
+    // Update and draw sparkles
+    sparkles = sparkles.filter(sparkle => sparkle.update(sparkleCtx));
+    sparkles.forEach(sparkle => sparkle.draw(sparkleCtx));
+    
+    // Add trailing sparkles
+    if (Math.random() > 0.7 && sparkles.length > 0) {
+      const lastSparkle = sparkles[Math.floor(Math.random() * sparkles.length)];
+      const trailColor = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+      sparkles.push(new SparkleParticle(lastSparkle.x, lastSparkle.y, trailColor));
+    }
+    
+    sparkleAnimation = requestAnimationFrame(animateSparkles);
+  }
+  
+  animateSparkles();
+  
+  // Stop animation after 4 seconds
+  setTimeout(() => {
+    if (sparkleAnimation) {
+      cancelAnimationFrame(sparkleAnimation);
+      sparkleCanvas.classList.remove('active');
+      sparkleCtx.clearRect(0, 0, sparkleCanvas.width, sparkleCanvas.height);
+      sparkleAnimation = null;
+    }
+  }, 4000);
+}
+
+// Stop sparkles when modal closes
+function stopFullPageSparkles() {
+  if (sparkleAnimation) {
+    cancelAnimationFrame(sparkleAnimation);
+    sparkleAnimation = null;
+  }
+  if (sparkleCanvas) {
+    sparkleCanvas.classList.remove('active');
+    const ctx = sparkleCanvas.getContext('2d');
+    ctx.clearRect(0, 0, sparkleCanvas.width, sparkleCanvas.height);
+  }
+  sparkles = [];
+}
+
+// Modal functions
+function showModal() {
+  if (modal) {
+    modal.classList.add('show');
+    setTimeout(() => closeModal(), 5000);
+  }
+}
+
+function closeModal() {
+  if (modal) {
+    stopFullPageSparkles();
+    modal.classList.remove('show');
+  }
+}
+
+if (modalCloseBtn) {
+  modalCloseBtn.addEventListener('click', closeModal);
+}
+
+if (modal) {
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal && modal.classList.contains('show')) {
+    closeModal();
+  }
+});
+
+// Resize canvas when window resizes
+window.addEventListener('resize', () => {
+  if (sparkleCanvas && sparkleCanvas.classList.contains('active')) {
+    sparkleCanvas.width = window.innerWidth;
+    sparkleCanvas.height = window.innerHeight;
+  }
+});
+
 
 // Scroll animations
 const fadeElements = document.querySelectorAll('.experience-card, .compact-project-card, .skill-inner-card, .edu-inner-card, .award-item, .stat-card-3d, .info-card-3d');
