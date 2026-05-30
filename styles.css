@@ -494,6 +494,7 @@ body {
   z-index: 1;
 }
 
+/* Floating badges - Desktop */
 .floating-badge {
   position: absolute;
   background: var(--bg-card);
@@ -505,6 +506,8 @@ body {
   border: var(--border-glow);
   white-space: nowrap;
   animation: floatBadge 3s infinite;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .badge1 {
@@ -523,30 +526,80 @@ body {
 }
 
 .badge3 {
-  top: 50%;
-  right: -50px;
+  top: 25%;
+  right: -15px;
   animation-delay: 2s;
   background: var(--gradient-accent);
   color: white;
 }
 
 .badge4 {
-  top: 20%;
-  left: -50px;
-  animation-delay: 2s;
+  bottom: 50%;
+  left: -15px;
+  animation-delay: 1.5s;
   background: linear-gradient(135deg, #ec4899, #8b5cf6);
   color: white;
 }
 
-@keyframes floatBadge {
-
-  0%,
-  100% {
-    transform: translateY(0);
+/* Mobile Fix */
+@media (max-width: 768px) {
+  .hero-image {
+    overflow: visible;
+    padding: 20px 0;
   }
+  
+  .profile-card-3d {
+    overflow: visible;
+    margin: 0 10px;
+  }
+  
+  .profile-inner {
+    margin: 20px 15px;
+  }
+  
+  .floating-badge {
+    padding: 4px 10px;
+    font-size: 0.6rem;
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Reposition all badges to corners */
+  .badge1 {
+    top: -10px;
+    right: -10px;
+  }
+  
+  .badge2 {
+    bottom: -10px;
+    left: -10px;
+  }
+  
+  .badge3 {
+    top: -10px;
+    left: -10px;
+    right: auto;
+  }
+  
+  .badge4 {
+    bottom: -10px;
+    right: -10px;
+    left: auto;
+  }
+}
 
-  50% {
-    transform: translateY(-8px);
+/* For tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .badge3 {
+    right: -15px;
+    left: auto;
+    top: 20%;
+  }
+  
+  .badge4 {
+    left: -15px;
+    right: auto;
+    bottom: 20%;
   }
 }
 
