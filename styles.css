@@ -295,6 +295,11 @@ body {
   }
 }
 
+/* Hero Section - Fix for wave emoji position */
+.hero-content {
+  position: relative;
+}
+
 .glow-text {
   font-size: 3.5rem;
   font-weight: 800;
@@ -304,34 +309,25 @@ body {
   background-clip: text;
   color: transparent;
   animation: textGlow 3s infinite;
-}
-
-@keyframes textGlow {
-
-  0%,
-  100% {
-    filter: drop-shadow(0 0 0px rgba(99, 102, 241, 0));
-  }
-
-  50% {
-    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
-  }
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .wave {
   display: inline-block;
   animation: wave 2s infinite;
+  font-size: 3rem;
+  order: -1; /* This moves the wave emoji to the left */
 }
 
 @keyframes wave {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: rotate(0deg);
   }
-
   50% {
-    transform: rotate(15deg);
+    transform: rotate(20deg);
   }
 }
 
@@ -454,6 +450,7 @@ body {
 .profile-card-3d {
   position: relative;
   perspective: 1000px;
+  overflow: visible;
 }
 
 .profile-inner {
@@ -494,7 +491,7 @@ body {
   z-index: 1;
 }
 
-/* Floating badges - Desktop */
+/* Floating badges */
 .floating-badge {
   position: absolute;
   background: var(--bg-card);
@@ -541,46 +538,45 @@ body {
   color: white;
 }
 
-/* Mobile Fix */
+/* Mobile Fix for badges */
 @media (max-width: 768px) {
   .hero-image {
     overflow: visible;
     padding: 20px 0;
   }
-  
+
   .profile-card-3d {
     overflow: visible;
     margin: 0 10px;
   }
-  
+
   .profile-inner {
     margin: 20px 15px;
   }
-  
+
   .floating-badge {
     padding: 4px 10px;
     font-size: 0.6rem;
     white-space: nowrap;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   }
-  
-  /* Reposition all badges to corners */
+
   .badge1 {
     top: -10px;
     right: -10px;
   }
-  
+
   .badge2 {
     bottom: -10px;
     left: -10px;
   }
-  
+
   .badge3 {
     top: -10px;
     left: -10px;
     right: auto;
   }
-  
+
   .badge4 {
     bottom: -10px;
     right: -10px;
@@ -595,7 +591,7 @@ body {
     left: auto;
     top: 20%;
   }
-  
+
   .badge4 {
     left: -15px;
     right: auto;
@@ -784,7 +780,7 @@ body {
   color: var(--primary);
 }
 
-/* Experience Tree Section - Fixed with Proper Branch Connections */
+/* Experience Tree Section */
 .experience {
   padding: 80px 0;
   position: relative;
@@ -896,7 +892,7 @@ body {
   border: 1px solid var(--border-glow);
   transition: all 0.4s ease;
   width: 360px;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   z-index: 3;
 }
@@ -958,6 +954,7 @@ body {
   font-size: 1.2rem;
   font-weight: 700;
   margin: 12px 18px 8px 18px;
+  word-wrap: break-word;
 }
 
 .card-company {
@@ -968,21 +965,21 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .card-company i {
   font-size: 0.7rem;
 }
 
-/* Company logo as inline image - same size as text */
+/* Company logo */
 .company-logo-img {
-  width: 3em;
-  /* Same size as current font */
-  height: 3em;
-  /* Same size as current font */
+  width: 2.5em;
+  height: 2.5em;
   vertical-align: middle;
   display: inline-block;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* Company link styling */
@@ -991,6 +988,7 @@ body {
   text-decoration: none;
   transition: all 0.3s ease;
   margin-left: 6px;
+  word-break: break-word;
 }
 
 .company-link:hover {
@@ -1036,6 +1034,7 @@ body {
   align-items: flex-start;
   gap: 8px;
   line-height: 1.4;
+  word-wrap: break-word;
 }
 
 .card-duties li i {
@@ -1160,7 +1159,7 @@ body {
   gap: 18px;
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid var(--border-glow);
 }
 
@@ -1204,6 +1203,7 @@ body {
 
 .compact-project-info {
   flex: 1;
+  min-width: 0;
 }
 
 .compact-project-info h4 {
@@ -1216,6 +1216,7 @@ body {
   color: var(--text-secondary);
   margin-bottom: 10px;
   line-height: 1.4;
+  word-wrap: break-word;
 }
 
 .compact-tech-stack {
@@ -1237,6 +1238,7 @@ body {
 .compact-project-actions {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .live-btn,
@@ -1520,6 +1522,7 @@ body {
   align-items: center;
   gap: 10px;
   backdrop-filter: blur(10px);
+  word-wrap: break-word;
 }
 
 .award-item:hover {
@@ -1527,7 +1530,7 @@ body {
   background: rgba(99, 102, 241, 0.1);
 }
 
-/* Education Section - Big Card with Inner Cards */
+/* Education Section */
 .education {
   padding: 80px 0;
 }
@@ -1617,6 +1620,7 @@ body {
 
 .edu-content {
   flex: 1;
+  min-width: 0;
 }
 
 .edu-year-badge {
@@ -1936,7 +1940,6 @@ body {
   .tree-branch {
     position: relative;
     margin: 15px 0;
-    /* Reduced from 30px */
     left: auto !important;
     right: auto !important;
     top: auto !important;
@@ -1953,7 +1956,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    /* Reduced from 20px */
     align-items: center;
   }
 
@@ -1966,18 +1968,19 @@ body {
   .tree-root {
     position: relative;
     margin-top: 15px;
-    /* Reduced from 30px */
     margin-bottom: 10px;
-    /* Reduced from 15px */
     display: inline-block;
     left: 50%;
     transform: translateX(-50%);
+    height: auto;
   }
 
-  /* Section spacing - dramatically reduced */
+  .root-node {
+    margin: 0;
+  }
+
   .section-header {
     margin-bottom: 15px !important;
-    /* Force reduced */
   }
 
   .experience,
@@ -1987,7 +1990,6 @@ body {
   .contact,
   .about {
     padding: 25px 0 !important;
-    /* Reduced from 50px */
   }
 }
 
@@ -1995,52 +1997,39 @@ body {
   .hero-container {
     grid-template-columns: 1fr;
     gap: 20px;
-    /* Reduced from 30px */
   }
 
   .about-grid {
     grid-template-columns: 1fr;
     gap: 15px;
-    /* Reduced from 25px */
   }
 
   .contact-wrapper-3d {
     grid-template-columns: 1fr;
     gap: 15px;
-    /* Reduced from 25px */
   }
 
   .glow-text {
     font-size: 2rem;
-    /* Reduced from 2.2rem */
     margin-bottom: 5px;
-    /* Reduced */
-  }
-
-  .badge3 {
-    display: none;
   }
 
   .projects-compact-grid {
     grid-template-columns: 1fr;
     gap: 12px;
-    /* Reduced */
   }
 
   .education-inner-grid {
     grid-template-columns: 1fr;
     gap: 12px;
-    /* Reduced */
   }
 
-  /* Section header spacing - dramatically reduced */
   .section-header {
     margin-bottom: 15px !important;
   }
 
   .section-header h2 {
     font-size: 1.5rem !important;
-    /* Smaller */
     margin-bottom: 4px !important;
   }
 
@@ -2056,10 +2045,8 @@ body {
     padding: 3px 10px;
   }
 
-  /* Hero section spacing */
   .hero {
     padding: 30px 0 40px !important;
-    /* Reduced from 50px */
   }
 
   .hero-badge {
@@ -2118,7 +2105,6 @@ body {
     left: 0;
   }
 
-  /* ALL SECTIONS - Minimal padding */
   .about,
   .experience,
   .projects,
@@ -2126,16 +2112,13 @@ body {
   .education,
   .contact {
     padding: 20px 0 !important;
-    /* Minimal padding */
   }
 
   .hero {
     padding: 20px 0 30px !important;
     min-height: auto;
-    /* Remove min-height */
   }
 
-  /* Section header - minimal spacing */
   .section-header {
     margin-bottom: 12px !important;
   }
@@ -2156,7 +2139,6 @@ body {
     height: 2px;
   }
 
-  /* Hero content - compact */
   .hero-title {
     font-size: 0.9rem;
     margin-bottom: 8px;
@@ -2201,7 +2183,6 @@ body {
     font-size: 0.9rem;
   }
 
-  /* About section - compact */
   .about-text p {
     margin-bottom: 8px;
     font-size: 0.8rem;
@@ -2231,9 +2212,10 @@ body {
     font-size: 0.8rem;
   }
 
-  /* Experience cards - compact */
   .experience-card {
     margin-bottom: 0;
+    width: 100%;
+    max-width: 100%;
   }
 
   .card-badge {
@@ -2250,6 +2232,11 @@ body {
   .card-company {
     font-size: 0.7rem;
     margin: 0 12px 4px 12px;
+  }
+
+  .company-logo-img {
+    width: 2em;
+    height: 2em;
   }
 
   .card-date {
@@ -2277,7 +2264,6 @@ body {
     gap: 6px;
   }
 
-  /* Tree branches spacing */
   .tree-branch {
     margin: 10px 0 !important;
   }
@@ -2286,7 +2272,6 @@ body {
     gap: 10px;
   }
 
-  /* Projects section - compact */
   .projects-glass-card,
   .skills-master-card,
   .education-master-card {
@@ -2357,7 +2342,6 @@ body {
     font-size: 0.65rem;
   }
 
-  /* Skills section - compact */
   .skills-master-header {
     margin-bottom: 15px;
     padding-bottom: 10px;
@@ -2417,7 +2401,6 @@ body {
     font-size: 0.6rem;
   }
 
-  /* Awards section - compact */
   .awards-section-3d h3 {
     font-size: 1rem;
     margin-bottom: 12px;
@@ -2433,7 +2416,6 @@ body {
     gap: 8px;
   }
 
-  /* Education section - compact */
   .education-master-header {
     margin-bottom: 15px;
     padding-bottom: 10px;
@@ -2483,7 +2465,6 @@ body {
     padding: 3px 10px;
   }
 
-  /* Contact section - compact */
   .contact-info-3d,
   .contact-form-3d {
     padding: 18px;
@@ -2521,20 +2502,17 @@ body {
     min-height: 80px;
   }
 
-  /* Footer */
   .footer {
     padding: 15px;
     font-size: 0.7rem;
   }
 
-  /* Hide scroll indicator */
   .scroll-indicator {
     display: none;
   }
 
-  /* Tree root */
   .root-node {
-    padding: 1px 4px;
+    padding: 5px 12px;
   }
 
   .root-icon {
