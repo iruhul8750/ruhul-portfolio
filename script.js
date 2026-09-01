@@ -107,9 +107,9 @@ if (contactForm) {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          access_key: '225c5a3b-bc69-4c28-8f17-04966106304a', // Replace with your actual access key
+          access_key: '225c5a3b-bc69-4c28-8f17-04966106304a',
           to_email: 'iruhul8750@gmail.com',
-          replyto: email,  // THIS MAKES REPLY BUTTON WORK
+          replyto: email,
           from_name: name,
           subject: `✨ New Portfolio Message from ${name}`,
           message: message,
@@ -122,7 +122,6 @@ if (contactForm) {
       const result = await response.json();
       
       if (result.success) {
-        // Show success modal with sparkles
         showModal();
         startFullPageSparkles();
         contactForm.reset();
@@ -170,7 +169,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Full Page Sparkle Animation (same as before)
+// Full Page Sparkle Animation
 function startFullPageSparkles() {
   sparkleCanvas = document.getElementById('fullPageSparkleCanvas');
   if (!sparkleCanvas) {
