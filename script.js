@@ -108,7 +108,7 @@ if (contactForm) {
         },
         body: JSON.stringify({
           access_key: '225c5a3b-bc69-4c28-8f17-04966106304a',
-          to_email: 'iruhul8750@gmail.com',
+          to_email: 'ruhul.islam1075@gmail.com',
           replyto: email,
           from_name: name,
           subject: `✨ New Portfolio Message from ${name}`,
@@ -130,7 +130,7 @@ if (contactForm) {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('❌ Failed to send message. Please try again or email me directly at iruhul8750@gmail.com');
+      alert('❌ Failed to send message. Please try again or email me directly at ruhul.islam1075@gmail.com');
     } finally {
       submitBtn.innerHTML = originalBtnText;
       submitBtn.disabled = false;
